@@ -1,8 +1,14 @@
-# Getting Started with Create React App
+# Fleet use case : a movie app
 
-This project was made with React 18 and TailwincCSS.
-Here are some instructions to run the app.
+This project was made with React 18, TailwindCSS and The Movie Database API.
+Here are the instructions to run the app.
 
-## Clone the project
+## Installation
+npm install
 
-## Install the dependencies
+Download/clone the folder and run npm install to install all the node packages
+
+## Run
+npm start
+
+You can run this project using npm start
