@@ -2,46 +2,47 @@ import axios from 'axios';
 import {useState, useEffect, useCallback} from 'react'
 import { useNavigate } from 'react-router-dom';
 import SearchBar from './SearchBar'
-const movies = require('../data/movies.json')
 
 function MovieList() {
 
   const BASE_URL = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}`;
   const [searchValue, setSearchValue] = useState('');
   const [moviesList, setMoviesList] = useState([]);
+  const [url, setUrl] = useState(`${BASE_URL}&query=${searchValue}`);
   const navigate = useNavigate();
 
   const handleSearch = (e) => {
     e.preventDefault();  
     setSearchValue(e.target.value)
-    e.target.value = '';
   }
+
+  // fetch the right url when user presses 'enter'
+  const handleSearchSubmit = (e) => {
+    setUrl(`${BASE_URL}search/movie?api_key=${process.env.REACT_APP_API_KEY}&query=${searchValue}`);
+    e.preventDefault();
+  }
+
+  // function for fetching movies in the api if url has changed (submit)
+  const handleFetchMovies = useCallback(() => {
+    if (!searchValue) return;
+    axios.get(`${BASE_URL}&query=${searchValue}`)
+    .then(res => res.data)
+    .then(data => {
+      setMoviesList(data);
+    })
+    .then(setSearchValue(''))
+    .catch((err) => console.log('Error', err));
+  }, [url]);
+
+
+  // fetch api only when url changes in previous function
+  useEffect(() => {
+    handleFetchMovies();
+  }, [handleFetchMovies]);
 
   const displayDetails = (id) => {
     navigate(`/movie/${id}`, { state: moviesList})
   }
-
-  const handleFetchMovies = useCallback(() => {
-    if (!searchValue) return;
-    const delayDebounce = setTimeout(() => {
-      console.log(searchValue)
-      axios.get(`${BASE_URL}&query=${searchValue}`)
-      .then(res => res.data)
-      .then(data => {
-        setMoviesList(data)
-      })
-      .catch((err) => console.log('Error', err));
-    },3000)
-    return () => clearTimeout(delayDebounce)
-  }, [searchValue]);
-
-  // essayer de fetcher quand l'utilisateur appuie sur entrée
-
-  console.log('movielist', moviesList);
-
-  useEffect(() => {
-    handleFetchMovies();
-  }, [handleFetchMovies]);
 
   return (
     <>
@@ -52,9 +53,9 @@ function MovieList() {
                 <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
             </svg>
         </div>
-        <SearchBar handleFetchMovies={handleFetchMovies} handleSearch={handleSearch} searchValue={searchValue} />
+        <SearchBar handleSearchSubmit={handleSearchSubmit} handleSearch={handleSearch} searchValue={searchValue} />
         <ul>
-        { moviesList.length === 0 && <div className='text-white'>Start typing to see the movies !</div> }
+        { moviesList.length === 0 && <div className='text-white font-light'>Start typing to see the movies !</div> }
         { moviesList.results && 
             moviesList.results.map((movie) =>
               <li  

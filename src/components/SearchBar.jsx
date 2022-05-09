@@ -1,17 +1,16 @@
-import {useState} from 'react'
-
-function SearchBar({handleSearch, searchValue}) {
+function SearchBar({handleSearch, handleSearchSubmit, searchValue}) {
 
     return (
         <>
             <form 
-            className='pb-10 sm:pt-10 sm:flex sm:items-center'>
+            className='pb-10 sm:pt-10 sm:flex sm:items-center'
+            onSubmit={handleSearchSubmit}
+            >
                 <input
-                className="border-transparent w-2/3 py-2 bg-transparent text-white placeholder-slate-50 text-xl font-light focus:outline-none"
+                className="border-transparent w-2/3 py-2 bg-transparent text-white font-normal placeholder-slate-50 text-xl focus:outline-none"
                 value={searchValue}
                 type="text" 
                 onChange={(e) => {handleSearch(e)}}
-                // onKeyPress={(e) => {handleSubmit(e)}}
                 placeholder='Search for a movie...'           
                 />
             </form>
