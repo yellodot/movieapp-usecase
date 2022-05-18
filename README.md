@@ -6,7 +6,11 @@ Here are the instructions to run the app.
 ## Installation
 npm install
 
-Download/clone the folder and run npm install to install all the node packages
+Clone the folder and run npm install to install all the node packages.
+
+## Setting an API key for the TMDB API
+
+Create a .env file duplicating the .env.sample file and replace the env variable with your TMDB API key.
 
 ## Run
 npm start
