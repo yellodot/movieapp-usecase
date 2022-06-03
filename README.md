@@ -1,4 +1,4 @@
-# Fleet use case : a movie app
+# Use case : a movie app
 
 This project was made with React 18, TailwindCSS and The Movie Database API.
 Here are the instructions to run the app.
